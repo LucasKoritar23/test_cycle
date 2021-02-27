@@ -16,7 +16,7 @@ class QasController < ApplicationController
   # POST /qas
   def create
     valid = ValidateQa.new.validate_post_qa(qa_params)
-    if valid.nil?
+    if valid == []
       @qa = Qa.new(qa_params)
       @qa.save
       render json: @qa, status: :created, location: @qa if @qa.save
