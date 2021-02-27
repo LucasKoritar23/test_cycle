@@ -4,7 +4,7 @@ class QasController < ApplicationController
   # GET /qas
   def index
     @qas = Qa.all
-
+    @qas = @qas.filter_by_nome_qa(params[:nome]) if params[:nome].present?
     render json: @qas
   end
 
@@ -29,7 +29,7 @@ class QasController < ApplicationController
   # PATCH/PUT /qas/1
   def update
     valid = ValidateQa.new.validate_edit_qa(qa_params)
-    if valid.nil?
+    if valid == []
       @qa.update(qa_params)
       if @qa.update(qa_params)
         render json: @qa
