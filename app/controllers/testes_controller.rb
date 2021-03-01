@@ -15,37 +15,45 @@ class TestesController < ApplicationController
 
   # POST /testes
   def create
-    @testis = Teste.new(testis_params)
-
-    if @testis.save
-      render json: @testis, status: :created, location: @testis
+    valid = ValidateTeste.new.validate_post_teste(testis_params)
+    if valid == []
+      @testis = Teste.new(testis_params)
+      @testis.save
+      render json: @testis, status: :created, location: @testis if @testis.save
+      render json: ValidateTeste.new.unique_value(@testis.errors), status: :bad_request, location: @testis unless @testis.save
     else
-      render json: @testis.errors, status: :unprocessable_entity
+      render json: valid, status: :bad_request
     end
   end
 
   # PATCH/PUT /testes/1
   def update
-    if @testis.update(testis_params)
-      render json: @testis
+    valid = ValidateTeste.new.validate_edit_teste(testis_params)
+    if valid == []
+      @testis.update(testis_params)
+      if @testis.update(testis_params)
+        render json: @testis
+      end
     else
-      render json: @testis.errors, status: :unprocessable_entity
+      render json: valid, status: :bad_request
     end
   end
 
   # DELETE /testes/1
   def destroy
     @testis.destroy
+    render json: { message: "Teste deletado com sucesso" }, status: :ok
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_testis
-      @testis = Teste.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def testis_params
-      params.require(:testis).permit(:suite_id, :nome)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_testis
+    @testis = Teste.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def testis_params
+    params.require(:testis).permit(:suite_id, :nome)
+  end
 end

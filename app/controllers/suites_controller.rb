@@ -42,6 +42,7 @@ class SuitesController < ApplicationController
   # DELETE /suites/1
   def destroy
     @suite.destroy
+    render json: { message: "Suite deletada com sucesso" }, status: :ok
   end
 
   private
