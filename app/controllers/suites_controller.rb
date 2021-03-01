@@ -41,8 +41,12 @@ class SuitesController < ApplicationController
 
   # DELETE /suites/1
   def destroy
-    @suite.destroy
-    render json: { message: "Suite deletada com sucesso" }, status: :ok
+    begin
+      @suite.destroy
+      render json: { message: "Suite deletada com sucesso" }, status: :ok
+    rescue ActiveRecord::InvalidForeignKey
+      render json: { message: "A suite possui testes vinculados" }, status: :ok
+    end
   end
 
   private
