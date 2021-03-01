@@ -49,7 +49,12 @@ class SuitesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_suite
-    @suite = Suite.find(params[:id])
+    begin
+      @suite = Suite.find(params[:id])
+    rescue => e
+      puts e.message
+      render json: { message: "Id da suite não encontrado" }, status: :not_found
+    end
   end
 
   # Only allow a list of trusted parameters through.

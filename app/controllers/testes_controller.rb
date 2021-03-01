@@ -50,7 +50,12 @@ class TestesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_testis
-    @testis = Teste.find(params[:id])
+    begin
+      @testis = Teste.find(params[:id])
+    rescue => e
+      puts e.message
+      render json: { message: "Id do teste não encontrado" }, status: :not_found
+    end
   end
 
   # Only allow a list of trusted parameters through.

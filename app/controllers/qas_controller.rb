@@ -49,7 +49,12 @@ class QasController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_qa
-    @qa = Qa.find(params[:id])
+    begin
+      @qa = Qa.find(params[:id])
+    rescue => e
+      puts e.message
+      render json: { message: "Id do QA não encontrado" }, status: :not_found
+    end
   end
 
   # Only allow a list of trusted parameters through.
