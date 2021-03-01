@@ -30,9 +30,10 @@ class TestesController < ApplicationController
   def update
     valid = ValidateTeste.new.validate_edit_teste(testis_params)
     if valid == []
-      @testis.update(testis_params)
       if @testis.update(testis_params)
         render json: @testis
+      else
+        render json: ValidateTeste.new.unique_value(@testis.errors), status: :bad_request, location: @testis
       end
     else
       render json: valid, status: :bad_request
