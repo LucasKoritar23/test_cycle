@@ -52,7 +52,7 @@ class ValidateTeste
     elsif name.length < 3 or name.length > 200
       errors << { error: "Nome deve conter entre 3 e 200 caracteres" }
     end
-    
+
     errors
 
     if suite.nil?
@@ -64,7 +64,7 @@ class ValidateTeste
     elsif suite == 0
       errors << { error: "suite_id não pode ser zero" }
     elsif suite.to_s.length > 256
-      errors << { error: "suite_id não pode ser maior que 256 numeros" }
+      errors << { error: "suite_id não pode ser maior que 256 números" }
     end
 
     errors
