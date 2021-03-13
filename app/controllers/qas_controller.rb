@@ -42,7 +42,7 @@ class QasController < ApplicationController
   # DELETE /qas/1
   def destroy
     @qa.destroy
-    render json: { message: "QA deletado com sucesso" }, status: :ok
+    render json: { message: "QA deletado com sucesso", item: JSON.parse(@qa.to_json) }, status: :ok
   end
 
   private
