@@ -42,8 +42,12 @@ class TestesController < ApplicationController
 
   # DELETE /testes/1
   def destroy
-    @testis.destroy
-    render json: { message: "Teste deletado com sucesso" }, status: :ok
+    begin
+      @testis.destroy
+      render json: { message: "Teste deletado com sucesso", item: JSON.parse(@suite.to_json) }, status: :ok
+    rescue ActiveRecord::InvalidForeignKey
+      render json: { message: "O Teste possui steps vinculados" }, status: :bad_request
+    end
   end
 
   private

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_01_210738) do
+ActiveRecord::Schema.define(version: 2021_03_13_191354) do
 
   create_table "qas", force: :cascade do |t|
     t.string "nome"
@@ -18,6 +18,16 @@ ActiveRecord::Schema.define(version: 2021_03_01_210738) do
     t.string "squad"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "steps", force: :cascade do |t|
+    t.integer "suite_id", null: false
+    t.integer "teste_id", null: false
+    t.string "nome"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["suite_id"], name: "index_steps_on_suite_id"
+    t.index ["teste_id"], name: "index_steps_on_teste_id"
   end
 
   create_table "suites", force: :cascade do |t|
@@ -34,5 +44,7 @@ ActiveRecord::Schema.define(version: 2021_03_01_210738) do
     t.index ["suite_id"], name: "index_testes_on_suite_id"
   end
 
+  add_foreign_key "steps", "suites"
+  add_foreign_key "steps", "testes", column: "teste_id"
   add_foreign_key "testes", "suites"
 end

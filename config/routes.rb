@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :steps
   resources :testes
   resources :suites
   resources :qas
