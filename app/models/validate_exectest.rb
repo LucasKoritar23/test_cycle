@@ -9,6 +9,10 @@ class ValidateExectest
     suite_id = params["suite_id"]
     teste_id = params["teste_id"]
 
+    return { error: "Deve possuir o campo qa_id" } if qa_id.nil? or qa_id == ""
+    return { error: "Deve possuir o campo suite_id" } if suite_id.nil? or suite_id == ""
+    return { error: "Deve possuir o campo teste_id" } if teste_id.nil? or teste_id == ""
+
     if qa_id.nil?
       errors << { error: "qa_id não pode ser nulo" }
     elsif qa_id.class != Integer
@@ -54,16 +58,21 @@ class ValidateExectest
     suite_id = exectest_params["suite_id"]
     teste_id = exectest_params["teste_id"]
 
-    return { error: "Deve possuir o campo qa_id" } if qa_id.nil? or qa_id == ""
-    return { error: "Deve possuir o campo suite_id" } if suite_id.nil? or suite_id == ""
-    return { error: "Deve possuir o campo teste_id" } if teste_id.nil? or teste_id == ""
-
     db = SQLite3::Database.open "db/development.sqlite3"
     db.results_as_hash = true
-    query = "SELECT * FROM exectests WHERE qa_id = #{qa_id} "
+
+    query = "SELECT count(*) as total_in_progress FROM exectests WHERE qa_id = #{qa_id} "
     query += "AND suite_id = #{suite_id} AND teste_id = #{teste_id} AND status = 'IN_PROGRESS'"
-    result_query = db.execute(query)
-    error << { error: "Já existem execuções ativas deste teste", test: JSON.parse(result_query.to_json) } unless result_query == []
+    result_query_count = db.execute(query)
+    total_in_progress = result_query_count[0]["total_in_progress"]
+
+    if total_in_progress > 0
+      query = "SELECT * FROM exectests WHERE qa_id = #{qa_id} "
+      query += "AND suite_id = #{suite_id} AND teste_id = #{teste_id} AND status = 'IN_PROGRESS'"
+      result_query = db.execute(query)
+      error << { error: "Já existem execuções ativas deste teste", test: JSON.parse(result_query.to_json) }
+    end
+
     db.close if db
 
     error
