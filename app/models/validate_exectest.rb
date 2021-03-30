@@ -74,7 +74,7 @@ class ValidateExectest
     return errors if errors != []
 
     valid_status = %w[BLOCKED FAILED SUCCESS]
-    
+
     valid_status.each do |key|
       if status == key
         @status = true
@@ -108,7 +108,7 @@ class ValidateExectest
       conn.close
     end
 
-    result_query_count[0]["finished"]
+    result_query_count[0]["finished"].to_i
   end
 
   def exec_already_test(exectest_params)
@@ -136,7 +136,7 @@ class ValidateExectest
       conn.close
     end
 
-    total_in_progress = result_query_count[0]["total_in_progress"]
+    total_in_progress = result_query_count[0]["total_in_progress"].to_i
 
     if total_in_progress > 0
       query = "SELECT * FROM exectests WHERE qa_id = #{qa_id} "
