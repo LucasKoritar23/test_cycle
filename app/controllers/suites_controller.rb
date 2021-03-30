@@ -45,7 +45,7 @@ class SuitesController < ApplicationController
       @suite.destroy
       render json: { message: "Suite deletada com sucesso", item: JSON.parse(@suite.to_json) }, status: :ok
     rescue ActiveRecord::InvalidForeignKey
-      render json: { message: "A suite possui testes vinculados" }, status: :ok
+      render json: { message: "A suite possui testes vinculados" }, status: :bad_request
     end
   end
 

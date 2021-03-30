@@ -41,13 +41,19 @@ class ExectestsController < ApplicationController
         render json: @exectest.errors, status: :unprocessable_entity
       end
     else
-        render json: valid, status: :bad_request
+      render json: valid, status: :bad_request
     end
   end
 
   # DELETE /exectests/1
   def destroy
-    @exectest.destroy
+    valid = ValidateExectest.new.validate_delete_exectest(@exectest)
+    if valid == []
+      @exectest.destroy
+      render json: { message: "Execução de teste deletada com sucesso", item: JSON.parse(@exectest.to_json) }, status: :ok
+    else
+      render json: valid, status: :bad_request
+    end
   end
 
   private
@@ -58,7 +64,7 @@ class ExectestsController < ApplicationController
       @exectest = Exectest.find(params[:id])
     rescue => e
       puts e.message
-      render json: { message: "Id do teste não encontrado" }, status: :not_found
+      render json: { message: "Id da execução de teste não encontrado" }, status: :not_found
     end
   end
 

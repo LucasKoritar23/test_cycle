@@ -57,7 +57,7 @@ class ValidateExectest
     return { error: "Deve possuir um JSON" } if params == {} or params == "{}" or params.nil?
 
     finish = exec_finish_test(exectest)
-    return { error: "O teste já foi finalizado" } if finish > 0
+    return { error: "A execução já foi finalizada e não pode ser alterada" } unless finish
 
     status = exectest_params["status"]
 
@@ -88,27 +88,15 @@ class ValidateExectest
   end
 
   def exec_finish_test(exectest)
-    id = exectest.id
-    query = "SELECT count(data_fim) as finished FROM exectests WHERE id = '#{id}' and data_fim is not null;"
+    exectest = JSON.parse(exectest.to_json)
+    data_fim = exectest["data_fim"]
+    valid = true
 
-    if ENV["RAILS_ENV"] == "development"
-      db = SQLite3::Database.open "db/development.sqlite3"
-      db.results_as_hash = true
-
-      result_query_count = db.execute(query)
-      db.close if db
-    else
-      conn = PG.connect(ENV["DATABASE_URL"])
-      run_query = conn.exec(query)
-      total_lines = run_query.count
-      result_query_count = []
-      total_lines.times do |line|
-        result_query_count << run_query[line]
-      end
-      conn.close
+    unless data_fim.nil?
+      valid = false
     end
 
-    result_query_count[0]["finished"].to_i
+    valid
   end
 
   def exec_already_test(exectest_params)
@@ -180,5 +168,14 @@ class ValidateExectest
     end
 
     { error: message_send }
+  end
+
+  def validate_delete_exectest(exectest)
+    errors = []
+    unless exectest["data_fim"].nil?
+      errors << { error: "A execução já foi finalizada e não pode ser deletada. Só é permitido deletar uma execução com status 'IN_PROGRESS'", test: JSON.parse(exectest.to_json) }
+    end
+
+    errors
   end
 end
