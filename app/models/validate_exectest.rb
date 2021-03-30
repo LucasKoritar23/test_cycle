@@ -1,5 +1,4 @@
 class ValidateExectest
-
   def validate_post_exectest(exectest_params)
     errors = []
     params = JSON.parse(exectest_params.to_json)
@@ -50,6 +49,59 @@ class ValidateExectest
     end
 
     errors
+  end
+
+  def validate_put_exectest(exectest_params, exectest)
+    errors = []
+    params = JSON.parse(exectest_params.to_json)
+    return { error: "Deve possuir um JSON" } if params == {} or params == "{}" or params.nil?
+
+    finish = exec_finish_test(exectest)
+    return { error: "O teste já foi finalizado" } if finish > 0
+
+    status = exectest_params["status"]
+
+    if status.nil?
+      errors << { error: "status não pode ser nulo" }
+    elsif status.class != String
+      errors << { error: "status deve ser String" }
+    elsif status == ""
+      errors << { error: "status não pode ser em branco" }
+    elsif status.length > 256
+      errors << { error: "status não pode ser maior que 256 números" }
+    end
+
+    return errors if errors != []
+
+    valid_status = %w[BLOCKED FAILED SUCCESS]
+    
+    valid_status.each do |key|
+      if status == key
+        @status = true
+        break
+      end
+    end
+
+    return { error: "O status inserido não é valido, status validos: #{valid_status}" } if @status.nil?
+
+    errors
+  end
+
+  def exec_finish_test(exectest)
+    id = exectest.id
+    query = "SELECT count(data_fim) as finished FROM exectests WHERE id = '#{id}' and data_fim is not null;"
+
+    if ENV["RAILS_ENV"] == "development"
+      db = SQLite3::Database.open "db/development.sqlite3"
+      db.results_as_hash = true
+
+      result_query_count = db.execute(query)
+      db.close if db
+    else
+      puts ENV.to_h
+    end
+
+    result_query_count[0]["finished"]
   end
 
   def exec_already_test(exectest_params)

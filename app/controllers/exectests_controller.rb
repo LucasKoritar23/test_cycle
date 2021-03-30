@@ -14,17 +14,6 @@ class ExectestsController < ApplicationController
   end
 
   # POST /exectests
-  # def create
-  #   valid = ValidateExecTest.new.exec_already(exectest_params_post)
-  #   @exectest = Exectest.new(exectest_params_post)
-  #   if @exectest.save
-  #     render json: @exectest, status: :created, location: @exectest
-  #   else
-  #     render json: @exectest.errors, status: :unprocessable_entity
-  #   end
-  # end
-  #
-
   def create
     valid = ValidateExectest.new.validate_post_exectest(exectest_params_post)
     exist = ValidateExectest.new.exec_already_test(exectest_params_post) if valid == []
@@ -44,10 +33,15 @@ class ExectestsController < ApplicationController
 
   # PATCH/PUT /exectests/1
   def update
-    if @exectest.update(exectest_params_put)
-      render json: @exectest
+    valid = ValidateExectest.new.validate_put_exectest(exectest_params_put, @exectest)
+    if valid == []
+      if @exectest.update(exectest_params_put)
+        render json: @exectest
+      else
+        render json: @exectest.errors, status: :unprocessable_entity
+      end
     else
-      render json: @exectest.errors, status: :unprocessable_entity
+        render json: valid, status: :bad_request
     end
   end
 
@@ -60,7 +54,12 @@ class ExectestsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_exectest
-    @exectest = Exectest.find(params[:id])
+    begin
+      @exectest = Exectest.find(params[:id])
+    rescue => e
+      puts e.message
+      render json: { message: "Id do teste não encontrado" }, status: :not_found
+    end
   end
 
   # Only allow a list of trusted parameters through.
