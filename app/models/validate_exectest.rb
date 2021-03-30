@@ -98,7 +98,14 @@ class ValidateExectest
       result_query_count = db.execute(query)
       db.close if db
     else
-      puts ENV.to_h
+      conn = PG.connect(ENV["DATABASE_URL"])
+      run_query = conn.exec(query)
+      total_lines = run_query.count
+      result_query_count = []
+      total_lines.times do |line|
+        result_query_count << run_query[line]
+      end
+      conn.close
     end
 
     result_query_count[0]["finished"]
@@ -110,22 +117,49 @@ class ValidateExectest
     suite_id = exectest_params["suite_id"]
     teste_id = exectest_params["teste_id"]
 
-    db = SQLite3::Database.open "db/development.sqlite3"
-    db.results_as_hash = true
-
     query = "SELECT count(*) as total_in_progress FROM exectests WHERE qa_id = #{qa_id} "
     query += "AND suite_id = #{suite_id} AND teste_id = #{teste_id} AND status = 'IN_PROGRESS'"
-    result_query_count = db.execute(query)
+
+    if ENV["RAILS_ENV"] == "development"
+      db = SQLite3::Database.open "db/development.sqlite3"
+      db.results_as_hash = true
+      result_query_count = db.execute(query)
+      db.close if db
+    else
+      conn = PG.connect(ENV["DATABASE_URL"])
+      run_query = conn.exec(query)
+      total_lines = run_query.count
+      result_query_count = []
+      total_lines.times do |line|
+        result_query_count << run_query[line]
+      end
+      conn.close
+    end
+
     total_in_progress = result_query_count[0]["total_in_progress"]
 
     if total_in_progress > 0
       query = "SELECT * FROM exectests WHERE qa_id = #{qa_id} "
       query += "AND suite_id = #{suite_id} AND teste_id = #{teste_id} AND status = 'IN_PROGRESS'"
-      result_query = db.execute(query)
+
+      if ENV["RAILS_ENV"] == "development"
+        db = SQLite3::Database.open "db/development.sqlite3"
+        db.results_as_hash = true
+        result_query = db.execute(query)
+        db.close if db
+      else
+        conn = PG.connect(ENV["DATABASE_URL"])
+        run_query = conn.exec(query)
+        total_lines = run_query.count
+        result_query = []
+        total_lines.times do |line|
+          result_query << run_query[line]
+        end
+        conn.close
+      end
+
       error << { error: "Já existem execuções ativas deste teste", test: JSON.parse(result_query.to_json) }
     end
-
-    db.close if db
 
     error
   end
