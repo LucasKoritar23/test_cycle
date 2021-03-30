@@ -57,7 +57,7 @@ class ValidateExectest
     return { error: "Deve possuir um JSON" } if params == {} or params == "{}" or params.nil?
 
     finish = exec_finish_test(exectest)
-    return { error: "O teste já foi finalizado e não pode ser alterado" } unless finish
+    return { error: "A execução já foi finalizada e não pode ser alterada" } unless finish
 
     status = exectest_params["status"]
 
