@@ -10,7 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_13_191354) do
+ActiveRecord::Schema.define(version: 2021_03_21_194636) do
+
+  create_table "exectests", force: :cascade do |t|
+    t.integer "qa_id", null: false
+    t.integer "suite_id", null: false
+    t.integer "teste_id", null: false
+    t.string "execucao_uuid"
+    t.string "data_inicio"
+    t.string "data_fim"
+    t.string "status"
+    t.string "evidencia"
+    t.string "comentario"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["qa_id"], name: "index_exectests_on_qa_id"
+    t.index ["suite_id"], name: "index_exectests_on_suite_id"
+    t.index ["teste_id"], name: "index_exectests_on_teste_id"
+  end
 
   create_table "qas", force: :cascade do |t|
     t.string "nome"
@@ -44,6 +61,9 @@ ActiveRecord::Schema.define(version: 2021_03_13_191354) do
     t.index ["suite_id"], name: "index_testes_on_suite_id"
   end
 
+  add_foreign_key "exectests", "qas"
+  add_foreign_key "exectests", "suites"
+  add_foreign_key "exectests", "testes", column: "teste_id"
   add_foreign_key "steps", "suites"
   add_foreign_key "steps", "testes", column: "teste_id"
   add_foreign_key "testes", "suites"

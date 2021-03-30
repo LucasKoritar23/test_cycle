@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  qa: one
+  suite: one
+  teste: one
+  execucao_uuid: MyString
+  data_inicio: MyString
+  data_fim: MyString
+  status: MyString
+  evidencia: MyString
+  comentario: MyString
+
+two:
+  qa: two
+  suite: two
+  teste: two
+  execucao_uuid: MyString
+  data_inicio: MyString
+  data_fim: MyString
+  status: MyString
+  evidencia: MyString
+  comentario: MyString
