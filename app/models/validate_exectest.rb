@@ -173,7 +173,7 @@ class ValidateExectest
   def validate_delete_exectest(exectest)
     errors = []
     unless exectest["data_fim"].nil?
-      errors << { error: "O teste já foi finalizado e não pode ser deletado. Só é permitido deletar uma execução com status 'IN_PROGRESS'", test: JSON.parse(exectest.to_json) }
+      errors << { error: "A execução já foi finalizada e não pode ser deletada. Só é permitido deletar uma execução com status 'IN_PROGRESS'", test: JSON.parse(exectest.to_json) }
     end
 
     errors
