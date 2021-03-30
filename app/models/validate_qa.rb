@@ -1,5 +1,6 @@
 class ValidateQa
   def validate_post_qa(qa_params)
+    puts(ENV.to_h)
     errors = []
     params = JSON.parse(qa_params.to_json)
     return { error: "Deve possuir um JSON" } if params == {} or params == "{}" or params.nil?
