@@ -110,6 +110,8 @@ class ValidateStep
       message_send = "Não existe uma suite com o id informado"
     elsif object == [:suite, :teste]
       message_send = ["Não existe um teste com o id informado", "Não existe uma suite com o id informado"]
+    elsif error == [["Já existe um step com o nome inserido"]]
+      message_send = "Já existe um step com o nome inserido"
     else
       message_send = "Inconsistências no payload enviado"
     end
