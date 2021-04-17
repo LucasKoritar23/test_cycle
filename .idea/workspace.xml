@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6a3cb7e4-bfe4-425e-b798-4a0079c8ff77" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/test_cycle.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/test_cycle.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.ruby-version" beforeDir="false" afterPath="$PROJECT_DIR$/.ruby-version" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gemfile" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/validate_step.rb" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/validate_step.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/development.sqlite3" beforeDir="false" />
-    </list>
+    <list default="true" id="6a3cb7e4-bfe4-425e-b798-4a0079c8ff77" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -154,7 +143,7 @@
       <option name="presentableId" value="Default" />
       <updated>1618688375848</updated>
       <workItem from="1618688377152" duration="2289000" />
-      <workItem from="1618691774742" duration="1327000" />
+      <workItem from="1618691774742" duration="2170000" />
     </task>
     <servers />
   </component>
